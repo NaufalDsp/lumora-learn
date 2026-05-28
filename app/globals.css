@@ -106,8 +106,51 @@ button {
   gap: 10px;
 }
 
-.public-header__menu {
+.public-header__mobile-menu {
   display: none;
+}
+
+.public-header__mobile-menu summary {
+  list-style: none;
+}
+
+.public-header__mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-close-icon,
+.public-header__mobile-menu[open] .menu-open-icon {
+  display: none;
+}
+
+.public-header__mobile-menu[open] .menu-close-icon {
+  display: block;
+}
+
+.public-header__mobile-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  display: grid;
+  min-width: 220px;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(11, 16, 32, 0.96);
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+
+.public-header__mobile-panel a {
+  border-radius: 12px;
+  color: #cbd5e1;
+  font-weight: 800;
+  padding: 12px;
+}
+
+.public-header__mobile-panel a:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--text);
 }
 
 .brand-logo {
@@ -712,6 +755,40 @@ p {
   padding: 48px 0;
 }
 
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.62fr);
+  gap: 28px;
+}
+
+.contact-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.contact-list span {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.62);
+  color: #cbd5e1;
+  padding: 10px 14px;
+}
+
+.contact-card {
+  align-self: start;
+}
+
+.about-hero {
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.22), rgba(56, 189, 248, 0.12)),
+    rgba(15, 23, 42, 0.76);
+}
+
 .auth-visual {
   min-height: 600px;
   background:
@@ -1144,6 +1221,7 @@ p {
   .course-detail-hero,
   .detail-grid,
   .auth-page,
+  .contact-layout,
   .split-section,
   .learning-room-page {
     grid-template-columns: 1fr;
@@ -1202,8 +1280,8 @@ p {
     display: none;
   }
 
-  .public-header__menu {
-    display: inline-flex;
+  .public-header__mobile-menu {
+    display: block;
     margin-left: auto;
   }
 
