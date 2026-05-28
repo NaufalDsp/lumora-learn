@@ -5,6 +5,8 @@ import { DataPanel } from "@/src/components/dashboard/DataPanel";
 import { StatCard } from "@/src/components/dashboard/StatCard";
 import { featuredCourses } from "@/src/domain/course/mock-courses";
 import { studentDashboard } from "@/src/domain/dashboard/mock-dashboard";
+import { CompleteLessonButton } from "./components/LearningActions";
+import { QuizAttemptClient } from "./components/QuizAttemptClient";
 
 export function StudentDashboardPage() {
   return (
@@ -118,6 +120,9 @@ export function LearningRoomPage() {
             <span>5 soal pilihan ganda</span>
           </ButtonLink>
         </div>
+        <div className="button-row section-action-row">
+          <CompleteLessonButton />
+        </div>
       </DataPanel>
     </div>
   );
@@ -126,20 +131,7 @@ export function LearningRoomPage() {
 export function StudentQuizPage() {
   return (
     <DataPanel eyebrow="Quiz" title="UI structure fundamentals">
-      <div className="quiz-card-large">
-        <p>Apa pola terbaik untuk menjaga Learning Room mudah dikembangkan?</p>
-        {[
-          "Memecah UI menjadi shell, panel, dan komponen domain",
-          "Menaruh semua state pada satu komponen global",
-          "Menghindari progress indicator",
-          "Membuat semua halaman sebagai modal"
-        ].map((answer, index) => (
-          <button className={index === 0 ? "answer active" : "answer"} key={answer}>
-            {answer}
-          </button>
-        ))}
-        <button className="button button--primary">Submit Kuis</button>
-      </div>
+      <QuizAttemptClient />
     </DataPanel>
   );
 }
@@ -160,7 +152,7 @@ export function StudentProfilePage() {
           Email
           <input defaultValue="alya@lumora.test" />
         </label>
-        <button className="button button--primary">Simpan Profil</button>
+        <button className="button button--primary" type="button">Simpan Profil</button>
       </div>
     </DataPanel>
   );

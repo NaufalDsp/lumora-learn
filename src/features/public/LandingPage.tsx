@@ -3,6 +3,7 @@ import { ButtonLink } from "@/src/components/ui/ButtonLink";
 import { CourseCard } from "@/src/components/course/CourseCard";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
 import { featuredCourses } from "@/src/domain/course/mock-courses";
+import type { Course } from "@/src/domain/course/types";
 import { DashboardPreview } from "./components/DashboardPreview";
 
 const features = [
@@ -20,7 +21,11 @@ const features = [
   }
 ];
 
-export function LandingPage() {
+type LandingPageProps = {
+  courses?: Course[];
+};
+
+export function LandingPage({ courses = featuredCourses }: LandingPageProps) {
   return (
     <main>
       <section className="hero-section">
@@ -77,7 +82,7 @@ export function LandingPage() {
           description="Preview katalog publik yang bisa dilihat guest sebelum login."
         />
         <div className="course-grid">
-          {featuredCourses.map((course) => (
+          {courses.map((course) => (
             <CourseCard course={course} key={course.slug} />
           ))}
         </div>
