@@ -17,6 +17,8 @@ import {
   verifications
 } from "../src/server/db/schema";
 import { db } from "../src/server/db/client";
+import { auth } from "../src/server/auth/auth";
+import { eq } from "drizzle-orm";
 
 async function clearDatabase() {
   await db.delete(activityLogs);
@@ -37,52 +39,69 @@ async function clearDatabase() {
   await db.delete(users);
 }
 
-async function seedUsers() {
-  await db.insert(users).values([
-    {
-      id: "user_admin",
-      name: "Admin Lumora",
-      email: "admin@lumora.test",
-      emailVerified: true,
-      role: "admin",
-      status: "active"
-    },
-    {
-      id: "user_instructor_raka",
-      name: "Raka Pradipta",
-      email: "raka@lumora.test",
-      emailVerified: true,
-      role: "instructor",
-      status: "active"
-    },
-    {
-      id: "user_instructor_maya",
-      name: "Maya Lestari",
-      email: "maya@lumora.test",
-      emailVerified: true,
-      role: "instructor",
-      status: "active"
-    },
-    {
-      id: "user_student_alya",
-      name: "Alya Putri",
-      email: "alya@lumora.test",
-      emailVerified: true,
-      role: "student",
-      status: "active"
-    },
-    {
-      id: "user_student_bima",
-      name: "Bima Satria",
-      email: "bima@lumora.test",
-      emailVerified: true,
-      role: "student",
-      status: "active"
+async function createAuthUser(input: {
+  name: string;
+  email: string;
+  password: string;
+  role: "admin" | "instructor" | "student";
+}) {
+  await auth.api.signUpEmail({
+    body: {
+      name: input.name,
+      email: input.email,
+      password: input.password
     }
-  ]);
+  });
+
+  const [user] = await db
+    .update(users)
+    .set({ role: input.role, emailVerified: true, status: "active" })
+    .where(eq(users.email, input.email))
+    .returning();
+
+  return user.id;
 }
 
-async function seedCatalog() {
+async function seedUsers() {
+  const adminId = await createAuthUser({
+    name: "Admin Lumora",
+    email: "admin@lumora.test",
+    password: "password1234",
+    role: "admin"
+  });
+
+  const rakaId = await createAuthUser({
+    name: "Raka Pradipta",
+    email: "raka@lumora.test",
+    password: "password1234",
+    role: "instructor"
+  });
+
+  const mayaId = await createAuthUser({
+    name: "Maya Lestari",
+    email: "maya@lumora.test",
+    password: "password1234",
+    role: "instructor"
+  });
+
+  const alyaId = await createAuthUser({
+    name: "Alya Putri",
+    email: "alya@lumora.test",
+    password: "password1234",
+    role: "student"
+  });
+
+  const bimaId = await createAuthUser({
+    name: "Bima Satria",
+    email: "bima@lumora.test",
+    password: "password1234",
+    role: "student"
+  });
+
+  return { adminId, rakaId, mayaId, alyaId, bimaId };
+}
+
+async function seedCatalog(userIds: Awaited<ReturnType<typeof seedUsers>>) {
   await db.insert(categories).values([
     { id: 1, name: "Programming", slug: "programming", description: "Web, app, dan software engineering." },
     { id: 2, name: "Design", slug: "design", description: "UI/UX, visual system, dan product design." },
@@ -94,7 +113,7 @@ async function seedCatalog() {
   await db.insert(courses).values([
     {
       id: 1,
-      instructorId: "user_instructor_raka",
+      instructorId: userIds.rakaId,
       categoryId: 1,
       title: "Frontend Mastery with Next.js",
       slug: "frontend-mastery-nextjs",
@@ -106,7 +125,7 @@ async function seedCatalog() {
     },
     {
       id: 2,
-      instructorId: "user_instructor_maya",
+      instructorId: userIds.mayaId,
       categoryId: 2,
       title: "UI/UX Futuristic Dashboard",
       slug: "uiux-futuristic-dashboard",
@@ -118,7 +137,7 @@ async function seedCatalog() {
     },
     {
       id: 3,
-      instructorId: "user_instructor_raka",
+      instructorId: userIds.rakaId,
       categoryId: 3,
       title: "Data Analytics for Product Teams",
       slug: "data-analytics-product-teams",
@@ -179,44 +198,45 @@ async function seedQuiz() {
   ]);
 }
 
-async function seedLearningActivity() {
+async function seedLearningActivity(userIds: Awaited<ReturnType<typeof seedUsers>>) {
   await db.insert(enrollments).values([
-    { id: 1, studentId: "user_student_alya", courseId: 1, progressPercentage: 68, status: "active" },
-    { id: 2, studentId: "user_student_alya", courseId: 2, progressPercentage: 42, status: "active" },
-    { id: 3, studentId: "user_student_bima", courseId: 1, progressPercentage: 91, status: "active" }
+    { id: 1, studentId: userIds.alyaId, courseId: 1, progressPercentage: 68, status: "active" },
+    { id: 2, studentId: userIds.alyaId, courseId: 2, progressPercentage: 42, status: "active" },
+    { id: 3, studentId: userIds.bimaId, courseId: 1, progressPercentage: 91, status: "active" }
   ]);
 
   await db.insert(lessonProgress).values([
-    { studentId: "user_student_alya", lessonId: 1, isCompleted: true, completedAt: new Date() },
-    { studentId: "user_student_alya", lessonId: 2, isCompleted: true, completedAt: new Date() },
-    { studentId: "user_student_bima", lessonId: 1, isCompleted: true, completedAt: new Date() },
-    { studentId: "user_student_bima", lessonId: 2, isCompleted: true, completedAt: new Date() },
-    { studentId: "user_student_bima", lessonId: 3, isCompleted: true, completedAt: new Date() }
+    { studentId: userIds.alyaId, lessonId: 1, isCompleted: true, completedAt: new Date() },
+    { studentId: userIds.alyaId, lessonId: 2, isCompleted: true, completedAt: new Date() },
+    { studentId: userIds.bimaId, lessonId: 1, isCompleted: true, completedAt: new Date() },
+    { studentId: userIds.bimaId, lessonId: 2, isCompleted: true, completedAt: new Date() },
+    { studentId: userIds.bimaId, lessonId: 3, isCompleted: true, completedAt: new Date() }
   ]);
 
   await db.insert(quizAttempts).values([
-    { quizId: 1, studentId: "user_student_alya", score: 86, status: "passed" },
-    { quizId: 1, studentId: "user_student_bima", score: 92, status: "passed" },
-    { quizId: 2, studentId: "user_student_alya", score: 64, status: "failed" }
+    { quizId: 1, studentId: userIds.alyaId, score: 86, status: "passed" },
+    { quizId: 1, studentId: userIds.bimaId, score: 92, status: "passed" },
+    { quizId: 2, studentId: userIds.alyaId, score: 64, status: "failed" }
   ]);
 
   await db.insert(activityLogs).values([
-    { userId: "user_student_alya", action: "completed_lesson", entityType: "lesson", entityId: 2 },
-    { userId: "user_instructor_raka", action: "published_course", entityType: "course", entityId: 1 },
-    { userId: "user_student_bima", action: "submitted_quiz", entityType: "quiz", entityId: 1 },
-    { userId: "user_admin", action: "reviewed_course", entityType: "course", entityId: 3 }
+    { userId: userIds.alyaId, action: "completed_lesson", entityType: "lesson", entityId: 2 },
+    { userId: userIds.rakaId, action: "published_course", entityType: "course", entityId: 1 },
+    { userId: userIds.bimaId, action: "submitted_quiz", entityType: "quiz", entityId: 1 },
+    { userId: userIds.adminId, action: "reviewed_course", entityType: "course", entityId: 3 }
   ]);
 }
 
 async function main() {
   await clearDatabase();
-  await seedUsers();
-  await seedCatalog();
+  const userIds = await seedUsers();
+  await seedCatalog(userIds);
   await seedCurriculum();
   await seedQuiz();
-  await seedLearningActivity();
+  await seedLearningActivity(userIds);
 
   console.log("Lumora Learn dummy data seeded successfully.");
+  console.log("Demo password for all seeded accounts: password1234");
 }
 
 main().catch((error) => {
