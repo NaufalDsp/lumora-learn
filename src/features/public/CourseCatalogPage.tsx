@@ -1,9 +1,14 @@
 import { CourseCard } from "@/src/components/course/CourseCard";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
 import { featuredCourses } from "@/src/domain/course/mock-courses";
+import type { Course } from "@/src/domain/course/types";
 import { CourseFilters } from "./components/CourseFilters";
 
-export function CourseCatalogPage() {
+type CourseCatalogPageProps = {
+  courses?: Course[];
+};
+
+export function CourseCatalogPage({ courses = featuredCourses }: CourseCatalogPageProps) {
   return (
     <main className="page">
       <section className="page-hero">
@@ -22,7 +27,7 @@ export function CourseCatalogPage() {
           description="Filter dan search sudah disiapkan sebagai UI awal untuk integrasi backend."
         />
         <div className="course-grid">
-          {featuredCourses.map((course) => (
+          {courses.map((course) => (
             <CourseCard course={course} key={course.slug} />
           ))}
         </div>

@@ -4,13 +4,15 @@ import { Badge } from "@/src/components/ui/Badge";
 import { ButtonLink } from "@/src/components/ui/ButtonLink";
 import { SectionHeading } from "@/src/components/ui/SectionHeading";
 import { getCourseBySlug } from "@/src/domain/course/mock-courses";
+import type { Course } from "@/src/domain/course/types";
 
 type CourseDetailPageProps = {
   slug: string;
+  course?: Course | null;
 };
 
-export function CourseDetailPage({ slug }: CourseDetailPageProps) {
-  const course = getCourseBySlug(slug);
+export function CourseDetailPage({ slug, course: courseFromDatabase }: CourseDetailPageProps) {
+  const course = courseFromDatabase ?? getCourseBySlug(slug);
 
   if (!course) {
     notFound();
