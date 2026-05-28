@@ -1,8 +1,9 @@
-import { Plus, Upload } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import { ButtonLink } from "@/src/components/ui/ButtonLink";
 import { DataPanel } from "@/src/components/dashboard/DataPanel";
 import { StatCard } from "@/src/components/dashboard/StatCard";
 import { instructorDashboard } from "@/src/domain/dashboard/mock-dashboard";
+import { UploadField } from "./components/UploadField";
 
 export function InstructorDashboardPage() {
   return (
@@ -77,6 +78,7 @@ export function CourseCreatePage() {
           </label>
         </div>
         <button className="button button--primary" type="button">Simpan Draft</button>
+        <UploadField />
       </div>
     </DataPanel>
   );
@@ -90,10 +92,7 @@ export function CourseBuilderPage() {
           <div className="module-builder-row" key={lesson}>
             <span>{index + 1}</span>
             <strong>{lesson}</strong>
-            <button className="button button--secondary" type="button">
-              <Upload size={17} />
-              Upload
-            </button>
+            <UploadField />
           </div>
         ))}
       </div>
@@ -126,7 +125,7 @@ export function MaterialLibraryPage() {
       <div className="stack-list">
         {instructorDashboard.materials.map((material) => (
           <div className="simple-row" key={material.name}>
-            <Upload size={18} />
+            <FileText size={18} />
             <div>
               <strong>{material.name}</strong>
               <span>{material.type}</span>

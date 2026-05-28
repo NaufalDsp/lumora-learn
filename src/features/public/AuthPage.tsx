@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Mail, ShieldCheck, UserRound } from "lucide-react";
-import { ButtonLink } from "@/src/components/ui/ButtonLink";
+import { ShieldCheck } from "lucide-react";
+import { AuthForm } from "./components/AuthForm";
 
 type AuthMode = "login" | "register" | "forgot-password";
 
@@ -67,53 +66,13 @@ export function AuthPage({ mode }: AuthPageProps) {
       <section className="auth-card">
         <span className="eyebrow">{copy.eyebrow}</span>
         <h2>{copy.title}</h2>
-        <form className="form-stack">
-          {isRegister ? (
-            <label>
-              Nama lengkap
-              <span className="input-shell">
-                <UserRound size={17} />
-                <input placeholder="Alya Putri" />
-              </span>
-            </label>
-          ) : null}
-          <label>
-            Email
-            <span className="input-shell">
-              <Mail size={17} />
-              <input placeholder="nama@email.com" type="email" />
-            </span>
-          </label>
-          {!isForgotPassword ? (
-            <label>
-              Password
-              <span className="input-shell">
-                <ShieldCheck size={17} />
-                <input placeholder="Minimal 8 karakter" type="password" />
-              </span>
-            </label>
-          ) : null}
-          {!isForgotPassword && !isRegister ? (
-            <div className="form-meta">
-              <label className="checkbox-label">
-                <input type="checkbox" />
-                Ingat saya
-              </label>
-              <Link href="/forgot-password">Lupa password?</Link>
-            </div>
-          ) : null}
-          <button className="button button--primary button--full" type="button">
-            {copy.button}
-          </button>
-        </form>
-        <p className="auth-helper">
-          {copy.helper} <Link href={copy.helperHref}>{copy.helperLabel}</Link>
-        </p>
-        {!isForgotPassword ? (
-          <ButtonLink href="/courses" variant="secondary" className="button--full">
-            Jelajahi katalog sebagai guest
-          </ButtonLink>
-        ) : null}
+        <AuthForm
+          mode={mode}
+          buttonLabel={copy.button}
+          helper={copy.helper}
+          helperHref={copy.helperHref}
+          helperLabel={copy.helperLabel}
+        />
       </section>
     </main>
   );
