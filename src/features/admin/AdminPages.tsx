@@ -32,7 +32,7 @@ export function UserManagementPage() {
             </div>
             <b>{user.role}</b>
             <span>{user.status}</span>
-            <button className="button button--secondary">Edit</button>
+            <button className="button button--secondary" type="button">Edit</button>
           </div>
         ))}
       </div>
@@ -52,7 +52,7 @@ export function AdminCourseManagementPage() {
             </div>
             <b>{course.status}</b>
             <span>{course.studentsCount} siswa</span>
-            <button className="button button--secondary">Review</button>
+            <button className="button button--secondary" type="button">Review</button>
           </div>
         ))}
       </div>
@@ -122,7 +122,7 @@ export function SystemSettingsPage() {
             <option value="disabled">Disabled</option>
           </select>
         </label>
-        <button className="button button--primary">Simpan Settings</button>
+        <button className="button button--primary" type="button">Simpan Settings</button>
       </div>
     </DataPanel>
   );

@@ -6,6 +6,8 @@ export const siteConfig = {
   navigation: [
     { label: "Beranda", href: "/" },
     { label: "Katalog", href: "/courses" },
+    { label: "About Me", href: "/about" },
+    { label: "Contact", href: "/contact" },
     { label: "Masuk", href: "/login" },
     { label: "Daftar", href: "/register" }
   ]

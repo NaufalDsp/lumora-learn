@@ -11,6 +11,8 @@ export function PublicFooter() {
       </div>
       <div className="public-footer__links">
         <Link href="/courses">Katalog</Link>
+        <Link href="/about">About Me</Link>
+        <Link href="/contact">Contact</Link>
         <Link href="/login">Login</Link>
         <Link href="/register">Register</Link>
         <Link href="/forgot-password">Reset password</Link>

@@ -76,7 +76,7 @@ export function CourseCreatePage() {
             </select>
           </label>
         </div>
-        <button className="button button--primary">Simpan Draft</button>
+        <button className="button button--primary" type="button">Simpan Draft</button>
       </div>
     </DataPanel>
   );
@@ -90,7 +90,7 @@ export function CourseBuilderPage() {
           <div className="module-builder-row" key={lesson}>
             <span>{index + 1}</span>
             <strong>{lesson}</strong>
-            <button className="button button--secondary">
+            <button className="button button--secondary" type="button">
               <Upload size={17} />
               Upload
             </button>
